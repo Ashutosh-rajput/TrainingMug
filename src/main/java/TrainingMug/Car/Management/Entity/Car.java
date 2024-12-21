@@ -3,6 +3,7 @@ package TrainingMug.Car.Management.Entity;
 import TrainingMug.Car.Management.Util.FuelType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.springframework.data.annotation.Transient;
 
@@ -22,13 +23,13 @@ public class Car {
     private String name;
     @NotBlank
     private String model;
-    @NotBlank
+    @NotNull
     private Integer year;
-    @NotBlank
+    @NotNull
     private Double price;
     @NotBlank
     private String color;
-    @NotBlank
-    private FuelType fuelType;
+    @Enumerated(EnumType.STRING)
+    private FuelType fueltype;
 
 }

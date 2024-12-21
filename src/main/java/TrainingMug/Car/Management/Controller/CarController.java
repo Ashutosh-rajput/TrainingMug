@@ -5,7 +5,8 @@ import TrainingMug.Car.Management.DTO.CarRegistrationDTO;
 import TrainingMug.Car.Management.DTO.CarResponseDTO;
 import TrainingMug.Car.Management.Service.ServiceInterface.CarServiceInterface;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,21 +16,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @RestController
-@Slf4j
 @RequestMapping("/Car")
+@Slf4j
 public class CarController {
-
     @Autowired
     private CarServiceInterface carService;
-
-
-    @GetMapping("/welcome")
-    public String welcome(Model model){
-        model.addAttribute("message","Welcome this endpoint is freeeee....");
-        return "welcome";
-    }
 
     @PostMapping("/create")
     @Operation(
@@ -75,8 +70,36 @@ public class CarController {
     @Operation(
             summary = "Get list of all cars stored in database."
     )
-    public ResponseEntity<Page<CarResponseDTO>> getListOfCars(@PathVariable int page, @PathVariable int size) {
+    public ResponseEntity<Page<CarResponseDTO>> getListOfCars(
+            @PathVariable int page,
+            @PathVariable int size,
+            @Parameter(description = "Select a field for sorting.",
+                        example = "name",
+                        allowEmptyValue = false,
+                        required = true,
+                        schema = @Schema(type = "string", allowableValues = {"name", "model", "year", "price", "color"}))
+            @RequestParam String field,
+            @Parameter(description = "Select a order for sorting.",
+                    example = "Ascending",
+                    allowEmptyValue = false,
+                    required = true,
+                    schema = @Schema(type = "string", allowableValues = {"Ascending", "Descending"}))
+            @RequestParam String order
+            ) {
         log.info("Fetching list of cars.");
-        return ResponseEntity.ok(carService.ListOfCars(page, size));
+        return ResponseEntity.ok(carService.ListOfCars(page, size, field, order));
     }
+
+    @GetMapping("/search")
+    @Operation(
+            summary = "you can search the keyword from car details."
+    )
+    public ResponseEntity<List<CarResponseDTO>> SearchCars(@RequestParam String keyword) {
+        log.info("Searching list of cars.");
+        List<CarResponseDTO> cars=carService.searchCarByKeyword(keyword);
+        return new ResponseEntity<>(cars,HttpStatus.OK);
+    }
+
+
+
 }

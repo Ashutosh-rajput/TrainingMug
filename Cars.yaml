@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: car-app
+  namespace: training-mug
+spec:
+  ports:
+    - port: 8080
+      targetPort: 8080
+  selector:
+    app: car-app
+  type: LoadBalancer
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: car-app
+  namespace: training-mug
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: car-app
+  template:
+    metadata:
+      labels:
+        app: car-app
+    spec:
+      containers:
+        - name: car-app
+          image: ashutoshrajput81/trainingmug:1.0
+          ports:
+            - containerPort: 8080
+

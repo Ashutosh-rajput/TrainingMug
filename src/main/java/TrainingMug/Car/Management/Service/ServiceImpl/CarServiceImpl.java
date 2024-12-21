@@ -14,8 +14,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -63,7 +65,7 @@ public class CarServiceImpl implements CarServiceInterface {
         Optional.ofNullable(carRegistrationDTO.getName()).ifPresent(car::setName);
         Optional.ofNullable(carRegistrationDTO.getModel()).ifPresent(car::setModel);
         Optional.ofNullable(carRegistrationDTO.getColor()).ifPresent(car::setColor);
-        Optional.ofNullable(carRegistrationDTO.getFuelType()).ifPresent(car::setFuelType);
+        Optional.ofNullable(carRegistrationDTO.getFueltype()).ifPresent(car::setFueltype);
         if(carRegistrationDTO.getYear() != 0){
             car.setYear(carRegistrationDTO.getYear());
         }
@@ -90,8 +92,10 @@ public class CarServiceImpl implements CarServiceInterface {
     }
 
     @Override
-    public Page<CarResponseDTO> ListOfCars(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
+    public Page<CarResponseDTO> ListOfCars(int page, int size, String field,String order) {
+        Sort.Direction sortDirection = order.equalsIgnoreCase("Descending") ? Sort.Direction.DESC : Sort.Direction.ASC;
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, field));
+
         Page<Car> cars = carRepo.findAll(pageable);
         if (cars.isEmpty()) {
             log.warn("No Cars found for the given criteria.");
@@ -100,5 +104,16 @@ public class CarServiceImpl implements CarServiceInterface {
         }
         return cars.map(car -> carMapper.CartoCarResponseDTo(car));
 
+    }
+
+    @Override
+    public List<CarResponseDTO> searchCarByKeyword(String keyword) {
+        List<Car> cars=carRepo.searchKeyword(keyword);
+        if(cars.size()==0){
+            throw new ResourceNotFoundException("No cars found with this keyword: "+ keyword);
+        }
+        log.info("No. of cars found: " + cars.size());
+
+        return cars.stream().map(carMapper::CartoCarResponseDTo).toList();
     }
 }

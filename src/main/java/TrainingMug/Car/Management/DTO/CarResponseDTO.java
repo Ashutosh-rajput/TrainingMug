@@ -1,6 +1,8 @@
 package TrainingMug.Car.Management.DTO;
 
 import TrainingMug.Car.Management.Util.FuelType;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.*;
 
 @AllArgsConstructor
@@ -15,5 +17,6 @@ public class CarResponseDTO {
     private Integer year;
     private Double price;
     private String color;
-    private FuelType fuelType;
+    @Enumerated(EnumType.STRING)
+    private FuelType fueltype;
 }

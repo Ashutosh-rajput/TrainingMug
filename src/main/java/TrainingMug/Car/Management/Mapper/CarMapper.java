@@ -20,6 +20,7 @@ public class CarMapper {
     }
 
     public Car CarRegistrationDTotoCar(CarRegistrationDTO carRegistrationDTO){
+
         return modelMapper.map(carRegistrationDTO, Car.class);
     }
 
