@@ -5,6 +5,13 @@ The Car Management System is designed to allow users to efficiently manage car d
 
 ---
 
+## Deployment Details
+
+- **Hosting**: Google Kubernetes Engine (GKE).
+- **API Documentation**: Accessible at [http://34.93.234.254:8080/swagger-ui/index.html](http://34.93.234.254:8080/swagger-ui/index.html).
+
+---
+
 ## Features
 
 ### Functional Requirements
@@ -37,45 +44,30 @@ The Car Management System is designed to allow users to efficiently manage car d
 
 ## API Endpoints
 
-### Base URL
-The API is hosted at: [http://34.93.234.254:8080/swagger-ui/index.html](http://34.93.234.254:8080/swagger-ui/index.html)
-
 ### Endpoints
-1. **Create Car**:
-    - `POST /Car/create`
-    - Add a new car to the system.
 
-2. **Update Car**:
-    - `PUT /Car/update/{id}`
-    - Update the details of an existing car.
+- **Create Car**:  
+  `POST /cars`  
+  Add a new car to the system.
 
-3. **Delete Car**:
-    - `DELETE /Car/delete/{id}`
-    - Delete a car by its ID.
+- **Update Car**:  
+  `PUT /cars/{id}`  
+  Update the details of an existing car.
 
-4. **Get Car by ID**:
-    - `GET /Car/get/{id}`
-    - Retrieve car details by ID.
+- **Delete Car**:  
+  `DELETE /cars/{id}`  
+  Delete a car by its ID.
 
-5. **Get All Cars**:
-    - `GET /Car/cars/{page}/{size}`
-    - Retrieve all cars with support for pagination and sorting.
+- **Get Car by ID**:  
+  `GET /cars/{id}`  
+  Retrieve car details by ID.
 
-6. **Global Search**:
-    - `GET /Car/search`
-    - Search for cars based on name, model, year, color, or fuel type.
+- **Get All Cars**:  
+  `GET /cars`  
+  Retrieve all cars with support for pagination and sorting.
 
----
+- **Global Search**:  
+  `GET /cars/search`  
+  Search for cars based on name, model, year, color, or fuel type.
 
-## Deployment Details
 
-- **Hosting**: Google Kubernetes Engine (GKE).
-- **API Documentation**: Accessible at [Swagger UI](http://34.93.234.254:8080/swagger-ui/index.html).
-
----
-
-## Setup Instructions
-
-1. **Clone the Repository**:
-   ```bash
-   https://github.com/Ashutosh-rajput/TrainingMug.git
